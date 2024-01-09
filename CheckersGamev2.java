@@ -45,9 +45,9 @@ public class CheckersGamev2 {
     {false, false, false, false, false, false, false, false},
     {false, false, false, false, false, false, false, false},
     {false, false, false, false, false, false, false, false},
-    {false, false, false, false, false, false, false, false},
-    {false, false, false, false, false, false, false, false},
-    {false, false, false, false, false, false, false, false},
+    {true, false, true, false, true, false, true, false},
+    {false, true, false, true, false, true, false, true},
+    {true, false, true, false, true, false, true, false},
     {false, false, false, false, false, false, false, false}
     };
     static boolean[][] boos2 = { //Used for force jumps - WHICH can move
@@ -104,114 +104,64 @@ public class CheckersGamev2 {
         int FL2 = Integer.parseInt(indexFL.substring(1,2)); //noice
         //boolean forceJump = false;
         //Should determine where the chip is and then allow only specific movements from that given location - NEW 2d ARRAY NEEDED
-        /* I coded this looking for force jumps only on the chip selected, not ALL chips- duh
-        if (player1){
-            if (chips[IL1][IL2].substring(0, 1).equals("R")){ //This sucks to look at - Fixed
-                //Check if it's a king or not, then detect if theres any force jumps
-                //If no force jump do regular forward/backward moves (depending on type)
-                
-                
-                if (chips[IL1][IL2].substring(1, 2).equals("K")){
-                    if (IL1+2 < 8){
-                        //Code here for below-chip detection (check if on board)
-                        if (IL2 + 2 < 8){
-                            if ((chips[IL1+1][IL2+1].equals("BC") || chips[IL1+1][IL2+1].equals("BK")) && chips[IL1+2][IL2+2].equals("")){ //Detects if chip is diagonal then if open space past it (REPEATED!!)
-                                forceJump = true;
-                                boos[IL1+2][IL2+2] = true;
-                            }
-                        }
-                        if (IL2 - 2 > -1){
-                            if ((chips[IL1+1][IL2-1].equals("BC") || chips[IL1+1][IL2-1].equals("BK")) && chips[IL1+2][IL2-2].equals("")){
-                                forceJump = true;
-                                boos[IL1+2][IL2-2] = true;
-                            }
-                        }
-                        
-                    }
-                    if (IL1-2 > -1){//ALL NEEDS FIXING STILL - DONE
-                        //Code here for above-chip detection (check if on board)
-                        if (IL2 + 2 < 8){
-                            if ((chips[IL1-1][IL2+1].equals("BC") || chips[IL1-1][IL2+1].equals("BK")) && chips[IL1-2][IL2+2].equals("")){
-                                forceJump = true;
-                                boos[IL1-2][IL2+2] = true;
-                            }
-                        }
-                        if (IL2 - 2 > -1){
-                            if ((chips[IL1-1][IL2-1].equals("BC") || chips[IL1-1][IL2-1].equals("BK")) && chips[IL1+2][IL2+2].equals("")){
-                                forceJump = true;
-                                boos[IL1-2][IL2-2] = true;
-                            }
-                        }
-                    }
-                } else { //Regular chip, only above-chip detection needed
-                    if (IL1-2 > -1){//ALL NEEDS FIXING STILL - DONE
-                        //Code here for above-chip detection (check if on board)
-                        if (IL2 + 2 < 8){
-                            if ((chips[IL1-1][IL2+1].equals("BC") || chips[IL1-1][IL2+1].equals("BK")) && chips[IL1-2][IL2+2].equals("")){
-                                forceJump = true;
-                                boos[IL1-2][IL2+2] = true;
-                            }
-                        }
-                        if (IL2 - 2 > -1){
-                            if ((chips[IL1-1][IL2-1].equals("BC") || chips[IL1-1][IL2-1].equals("BK")) && chips[IL1+2][IL2+2].equals("")){
-                                forceJump = true;
-                                boos[IL1-2][IL2-2] = true;
-                            }
-                        }
-                    }
-                }
-                
-                
-            } else {
-                //Invalid chip! (blank spot)
-                
-            }
-        } else if (!player1){ //Added for readability - PLAYER 2 FJ CHECK
-            
-        }
-        */
-        int tempCountx = 0;
-        while(forceJumps()){ //Need king detection inside as well!
-            tempCountx++;
-            
-        }
-        if (tempCountx == 0){ //MEANING THAT NO FORCE JUMPS OCCURRED
-            //Regular moves go here ALSO KING DETECTION
-        }
         
-        //if force jump is true then go ahead and run that and skip the regular movement (if else statement)
-        //  force jumps should loop, but as soon as done with them should end player turn
     }
     
     public static void inputDetect(String loc){ //Locations will be button numbers rather than index locations... cause thats a lot of work
-        countInp++;
-        if (countInp == 1){ //Take the location and assign it to initial or final locations based on if it's first or last input
-            initialLoc = loc;
-        } else if (countInp == 2){
-            finalLoc = loc;
-            movementStart();
-        } else {
+        
+        if (forceJumps()){
+            while(forceJumps()){
+               gameBoardUpdate(); //Updates based on FJs method updates (boos and boos2 is what im referring to)
+               countInp++;
+                if (countInp == 1){ //Take the location and assign it to initial or final locations based on if it's first or last input
+                    initialLoc = loc;
+                } else if (countInp == 2){
+                    finalLoc = loc;
+                    movementStart();
+                    countInp = 0;
+                    gameBoardUpdate();
+                }
+            }
+            player1 = !player1;
             countInp = 0;
-            player1 = !player1; //Next player! although itll still switch player even if invalid input, oh well NEED TO FIX****************************************************
+            gameBoardUpdate();
+        } else {
+            countInp++;
+            if (countInp == 1){ //Take the location and assign it to initial or final locations based on if it's first or last input
+                initialLoc = loc;
+            } else if (countInp == 2){
+                finalLoc = loc;
+                movementStart();
+                player1 = !player1;
+                countInp = 0;
+                gameBoardUpdate();
+            }
         }
+        
     }
     
     /*
     Force jump detector!
     */
     public static boolean forceJumps(){
-        //First reset possible moves
-        for (boolean[] boolRow : boos){
-            for (boolean bool : boolRow){
-                bool = false;
-            }
-        }
+        boolean[][] boostemp = { //Used for any jumps - WHERE they will move
+        {false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false}
+        };
         //First reset chips for force jumpin
         for (boolean[] boolRow : boos2){
             for (boolean bool2 : boolRow){
                 bool2 = false;
             }
         }
+        
+        
         boolean forceJump = false;
         if (player1){
             //loop through all chips, find those that are red
@@ -228,7 +178,7 @@ public class CheckersGamev2 {
                                 if (j + 2 < 8){
                                     if ((chips[i-1][j+1].equals("BC") || chips[i-1][j+1].equals("BK")) && chips[i-2][j+2].equals("")){ //Same for all of the following: Checks for diagonal chip and if open space beyond that
                                         forceJump = true; //Sets force jump to true for returning - allows loop for moves to occur
-                                        boos[i-2][j+2] = true; //Sets space diagonal (past chip) to allow moves
+                                        boostemp[i-2][j+2] = true; //Sets space diagonal (past chip) to allow moves
                                         boos2[i][j] = true; //Sets chip needing force jump to be moveable
                                         //Repeated below!
                                     }
@@ -236,7 +186,7 @@ public class CheckersGamev2 {
                                 if (j - 2 > -1){
                                     if ((chips[i-1][j-1].equals("BC") || chips[i-1][j-1].equals("BK")) && chips[i-2][j-2].equals("")){
                                         forceJump = true;
-                                        boos[i-2][j-2] = true;
+                                        boostemp[i-2][j-2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
@@ -247,14 +197,14 @@ public class CheckersGamev2 {
                                 if (j + 2 < 8){
                                     if ((chips[i+1][i+1].equals("BC") || chips[i+1][j+1].equals("BK")) && chips[i+2][j+2].equals("")){ //Detects if chip is diagonal then if open space past it (REPEATED!!)
                                         forceJump = true;
-                                        boos[i+2][j+2] = true;
+                                        boostemp[i+2][j+2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
                                 if (j - 2 > -1){
                                     if ((chips[i+1][j-1].equals("BC") || chips[i+1][j-1].equals("BK")) && chips[i+2][j-2].equals("")){
                                         forceJump = true;
-                                        boos[i+2][j-2] = true;
+                                        boostemp[i+2][j-2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
@@ -264,14 +214,14 @@ public class CheckersGamev2 {
                                 if (j + 2 < 8){
                                     if ((chips[i-1][j+1].equals("BC") || chips[i-1][j+1].equals("BK")) && chips[i-2][j+2].equals("")){
                                         forceJump = true;
-                                        boos[i-2][j+2] = true;
+                                        boostemp[i-2][j+2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
                                 if (j - 2 > -1){
                                     if ((chips[i-1][j-1].equals("BC") || chips[i-1][j-1].equals("BK")) && chips[i-2][j-2].equals("")){
                                         forceJump = true;
-                                        boos[i-2][j-2] = true;
+                                        boostemp[i-2][j-2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
@@ -296,7 +246,7 @@ public class CheckersGamev2 {
                                 if (j + 2 < 8){
                                     if ((chips[i+1][j+1].equals("RC") || chips[i+1][j+1].equals("RK")) && chips[i+2][j+2].equals("")){ //Same for all of the following: Checks for diagonal chip and if open space beyond that
                                         forceJump = true; //Sets force jump to true for returning - allows loop for moves to occur
-                                        boos[i+2][j+2] = true; //Sets space diagonal (past chip) to allow moves
+                                        boostemp[i+2][j+2] = true; //Sets space diagonal (past chip) to allow moves
                                         boos2[i][j] = true; //Sets chip needing force jump to be moveable
                                         //Repeated below!
                                     }
@@ -304,7 +254,7 @@ public class CheckersGamev2 {
                                 if (j - 2 > -1){
                                     if ((chips[i+1][j-1].equals("RC") || chips[i+1][j-1].equals("RK")) && chips[i+2][j-2].equals("")){
                                         forceJump = true;
-                                        boos[i+2][j-2] = true;
+                                        boostemp[i+2][j-2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
@@ -315,14 +265,14 @@ public class CheckersGamev2 {
                                 if (j + 2 < 8){
                                     if ((chips[i+1][i+1].equals("RC") || chips[i+1][j+1].equals("RK")) && chips[i+2][j+2].equals("")){ //Detects if chip is diagonal then if open space past it (REPEATED!!)
                                         forceJump = true;
-                                        boos[i+2][j+2] = true;
+                                        boostemp[i+2][j+2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
                                 if (j - 2 > -1){
                                     if ((chips[i+1][j-1].equals("RC") || chips[i+1][j-1].equals("RK")) && chips[i+2][j-2].equals("")){
                                         forceJump = true;
-                                        boos[i+2][j-2] = true;
+                                        boostemp[i+2][j-2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
@@ -332,14 +282,14 @@ public class CheckersGamev2 {
                                 if (j + 2 < 8){
                                     if ((chips[i-1][j+1].equals("BC") || chips[i-1][j+1].equals("BK")) && chips[i-2][j+2].equals("")){
                                         forceJump = true;
-                                        boos[i-2][j+2] = true;
+                                        boostemp[i-2][j+2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
                                 if (j - 2 > -1){
                                     if ((chips[i-1][j-1].equals("BC") || chips[i-1][j-1].equals("BK")) && chips[i-2][j-2].equals("")){
                                         forceJump = true;
-                                        boos[i-2][j-2] = true;
+                                        boostemp[i-2][j-2] = true;
                                         boos2[i][j] = true;
                                     }
                                 }
@@ -349,6 +299,9 @@ public class CheckersGamev2 {
                     }
                 }
             }
+        }
+        if (forceJump){
+            boos = boostemp.clone(); //Change possible moves to only the force jumps or leave same if no FJ
         }
         return forceJump;
     }
@@ -396,6 +349,17 @@ public class CheckersGamev2 {
                         butts[i][j].setText("BK");
                         butts[i][j].setForeground(Color.WHITE);
                     }
+                }
+                
+                //jump highlighter
+                if (boos[i][j]){
+                    butts[i][j].setBackground(Color.GREEN);
+                    butts[i][j].setOpaque(true);
+                    butts[i][j].setContentAreaFilled(true);
+                    butts[i][j].setBorderPainted(true);
+                }
+                if (boos2[i][j]){
+                    butts[i][j].setForeground(Color.GREEN);
                 }
             }
         }
