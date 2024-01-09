@@ -4,6 +4,7 @@
 
 package com.mycompany.checkersgamev2;
 import javax.swing.*;
+import java.awt.*;
 /**
  *
  * @author antho
@@ -38,10 +39,43 @@ public class CheckersGamev2 {
         gamey.setVisible(true);
         
         
-        //Initialize gameboard
+        //Initialize gameboard -first testing and then added in own method for updating gameboard
         for (int i = 0; i < chips.length; i++){
             for (int j = 0; j < chips[i].length; j++){
-                
+                if (chips[i][j].equals("")){ //No chip
+                    butts[i][j].setOpaque(false);
+                    butts[i][j].setContentAreaFilled(false);
+                    butts[i][j].setBorderPainted(false);
+                    butts[i][j].setText("");
+                } else if (chips[i][j].substring(0,1).equals("R")){ //Determine color
+                    if (chips[i][j].substring(1,2).equals("C")){ //Regular red chip
+                        butts[i][j].setBackground(Color.RED);
+                        butts[i][j].setOpaque(true);
+                        butts[i][j].setContentAreaFilled(true);
+                        butts[i][j].setBorderPainted(true);
+                        butts[i][j].setText("RC");
+                    } else { //King red chip
+                        butts[i][j].setBackground(Color.RED);
+                        butts[i][j].setOpaque(true);
+                        butts[i][j].setContentAreaFilled(true);
+                        butts[i][j].setBorderPainted(true);
+                        butts[i][j].setText("RK");
+                    }
+                } else { //Black chip
+                    if (chips[i][j].substring(1,2).equals("C")){ //Regular red chip
+                        butts[i][j].setBackground(Color.BLACK);
+                        butts[i][j].setOpaque(true);
+                        butts[i][j].setContentAreaFilled(true);
+                        butts[i][j].setBorderPainted(true);
+                        butts[i][j].setText("BC");
+                    } else { //King red chip
+                        butts[i][j].setBackground(Color.BLACK);
+                        butts[i][j].setOpaque(true);
+                        butts[i][j].setContentAreaFilled(true);
+                        butts[i][j].setBorderPainted(true);
+                        butts[i][j].setText("BK");
+                    }
+                }
             }
         }
     }
