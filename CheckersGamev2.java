@@ -21,6 +21,7 @@ public class CheckersGamev2 {
     static String indexFL = "";
     static boolean player1 = true;
     static GameBoard gamey = new GameBoard();
+    //temp commented out for testing
     static String[][] chips = {
 {"", "BC", "", "BC", "", "BC", "", "BC"}, 
 {"BC", "", "BC", "", "BC", "", "BC", ""}, 
@@ -31,6 +32,19 @@ public class CheckersGamev2 {
 {"", "RC", "", "RC", "", "RC", "", "RC"},
 {"RC", "", "RC", "", "RC", "", "RC", ""},
 };
+
+    /*
+    static String[][] chips = {
+{"BC", "", "", "", "", "", "", ""}, 
+{"", "", "", "", "", "", "BC", ""}, 
+{"", "BC", "", "", "", "", "", ""},
+{"", "", "", "", "BC", "", "", ""}, 
+{"", "", "", "", "", "", "", ""},
+{"", "", "BC", "", "", "", "", ""},
+{"", "RC", "", "", "", "", "", ""},
+{"", "", "", "", "", "", "", ""},
+};
+*/
     static javax.swing.JButton[][] butts = {
 {gamey.b1, gamey.b2, gamey.b3, gamey.b4, gamey.b5, gamey.b6, gamey.b7, gamey.b8},
 {gamey.b9, gamey.b10, gamey.b11, gamey.b12, gamey.b13, gamey.b14, gamey.b15, gamey.b16},
@@ -263,6 +277,7 @@ public class CheckersGamev2 {
                 }
                 countInp = 0;
                 gameBoardUpdate();
+                gameBoardUpdate();
             }
         } else {
             fjCount = 0;
@@ -275,6 +290,7 @@ public class CheckersGamev2 {
                 movementStart();
                 player1 = !player1;
                 countInp = 0;
+                gameBoardUpdate();
                 gameBoardUpdate();
             }
         }
@@ -488,10 +504,10 @@ public class CheckersGamev2 {
                                     boos[i-1][j+1] = true;
                                 }
                                 if (chips[i][j].substring(1,2).equals("K")){
-                                    if (i+1 > -1 && j-1 > -1 && chips[i+1][j-1].equals("")){
+                                    if (i+1 <8 && j-1 > -1 && chips[i+1][j-1].equals("")){
                                         boos[i+1][j-1] = true;
                                     }
-                                    if (i+1 >-1 && j+1 < 8 && chips[i+1][j+1].equals("")){
+                                    if (i+1 <8 && j+1 < 8 && chips[i+1][j+1].equals("")){
                                         boos[i+1][j+1] = true;
                                     }
                                 }
