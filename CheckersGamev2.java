@@ -259,6 +259,7 @@ public class CheckersGamev2 {
                 movementStart();
                 if (!forceJumps()){
                     player1 = !player1;
+                    fjCount = 0;
                 }
                 countInp = 0;
                 gameBoardUpdate();
@@ -301,7 +302,7 @@ public class CheckersGamev2 {
             }
         }
         
-        
+        System.out.println(fjCount + " is the current amount of force jumps in a row");
         boolean forceJump = false;
         if (player1){
             //loop through all chips, find those that are red
@@ -332,7 +333,8 @@ public class CheckersGamev2 {
                                         }
                                     }
                                 }
-                            } else if (chips[i][j].substring(1, 2).equals("K") || fjCount > 0){
+                            }
+                            if (chips[i][j].substring(1, 2).equals("K") || fjCount > 0){
                                 if (i+2 < 8){
                                     //Code here for below-chip detection (check if on board)
                                     if (j + 2 < 8){
@@ -404,7 +406,8 @@ public class CheckersGamev2 {
                                         }
                                     }
                                 }
-                            } else if (chips[i][j].substring(1, 2).equals("K") || fjCount > 0){
+                            }
+                            if (chips[i][j].substring(1, 2).equals("K") || fjCount > 0){
                                 if (i+2 < 8){
                                     //Code here for below-chip detection (check if on board)
                                     if (j + 2 < 8){
