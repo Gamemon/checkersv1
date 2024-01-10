@@ -14,6 +14,8 @@ import java.awt.*;
 public class CheckersGamev2 {
 
     static int fjCount = 0;
+    static String fjChip = "";
+    static boolean fjContinue = true;
     static int countInp = 0;
     static String initialLoc = "00";
     static String finalLoc = "00";
@@ -22,7 +24,7 @@ public class CheckersGamev2 {
     static boolean player1 = true;
     static GameBoard gamey = new GameBoard();
     //temp commented out for testing
-    static String[][] chips = {
+    /*static String[][] chips = {
 {"", "BC", "", "BC", "", "BC", "", "BC"}, 
 {"BC", "", "BC", "", "BC", "", "BC", ""}, 
 {"", "BC", "", "BC", "", "BC", "", "BC"},
@@ -32,19 +34,20 @@ public class CheckersGamev2 {
 {"", "RC", "", "RC", "", "RC", "", "RC"},
 {"RC", "", "RC", "", "RC", "", "RC", ""},
 };
+    */
 
-    /*
+    
     static String[][] chips = {
-{"BC", "", "", "", "", "", "", ""}, 
-{"", "", "", "", "", "", "BC", ""}, 
+{"", "", "", "", "", "", "", ""}, 
+{"BC", "", "", "", "", "", "BC", ""}, 
 {"", "BC", "", "", "", "", "", ""},
-{"", "", "", "", "BC", "", "", ""}, 
+{"RC", "", "", "", "BC", "", "", ""}, 
 {"", "", "", "", "", "", "", ""},
 {"", "", "BC", "", "", "", "", ""},
 {"", "RC", "", "", "", "", "", ""},
 {"", "", "", "", "", "", "", ""},
 };
-*/
+
     static javax.swing.JButton[][] butts = {
 {gamey.b1, gamey.b2, gamey.b3, gamey.b4, gamey.b5, gamey.b6, gamey.b7, gamey.b8},
 {gamey.b9, gamey.b10, gamey.b11, gamey.b12, gamey.b13, gamey.b14, gamey.b15, gamey.b16},
@@ -185,11 +188,27 @@ public class CheckersGamev2 {
                 System.out.println("__________________boos2^");
                 System.out.println(boos2[FL1][FL2] + " and " + boos[IL1][IL2]);
                 */
-                if (boos2[IL1][IL2] && boos[FL1][FL2]){
+                int tempInt = 0;
+                //This checks if the same chip is being used!
+                if (fjCount == 0){
+                    fjChip = FL1 + "" + FL2;
+                    tempInt = 1;
+                } else if (fjCount >= 1){ //Added for readability
+                    if (fjChip.equals(IL1+""+IL2)){
+                        tempInt = 1;
+                        fjChip = FL1 + "" + FL2;
+                        
+                    } else {
+                        tempInt = 0;
+                    }
+                }
+                
+                if (boos2[IL1][IL2] && boos[FL1][FL2] && tempInt > 0){
                     //System.out.println("Force jump!s2");
                     fjCount++;
+                    
                     if (chips[IL1][IL2].equals("RC")){
-                        if ((IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2) && fjCount > 0){
+                        if ((IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2) && fjCount > 0 && fjChip.equals(chips[IL1][IL2])){
                             //System.out.println("Force jump!s3");
                             int checker1 = FL1-IL1;
                             int checker2 = FL2-IL2;
@@ -271,13 +290,14 @@ public class CheckersGamev2 {
             } else if (countInp == 2){
                 finalLoc = loc;
                 movementStart();
-                if (!forceJumps()){
+                if (!forceJumps() || !fjContinue){
                     player1 = !player1;
                     fjCount = 0;
                 }
                 countInp = 0;
                 gameBoardUpdate();
                 gameBoardUpdate();
+                fjContinue = true;
             }
         } else {
             fjCount = 0;
@@ -467,9 +487,17 @@ public class CheckersGamev2 {
                 }
             }
         }
-        if (forceJump){
+        if (!fjChip.equals("")){
+            if (!boos2[Integer.parseInt(fjChip.substring(0,1))][Integer.parseInt(fjChip.substring(1,2))]){
+                System.out.println("fj chain end");
+                fjContinue = false;
+            }
+        }
+        if (forceJump && fjContinue){
             boos = boostemp.clone(); //Change possible moves to only the force jumps or leave same if no FJ
         }
+        
+        
         return forceJump;
     }
     
