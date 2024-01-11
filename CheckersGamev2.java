@@ -13,7 +13,7 @@ import java.awt.*;
 
 public class CheckersGamev2 {
 
-    static int fjCount = 0;
+    static int fjCount = 0; //Counts how many continuous force jumps there are
     static String fjChip = "";
     static boolean fjContinue = true;
     static int countInp = 0;
@@ -576,14 +576,14 @@ public class CheckersGamev2 {
                                 if (i-2 > -1){//ALL NEEDS FIXING STILL - DONE
                                     //Code here for above-chip detection (check if on board)
                                     if (j + 2 < 8){
-                                        if ((chips[i-1][j+1].equals("BC") || chips[i-1][j+1].equals("BK")) && chips[i-2][j+2].equals("")){
+                                        if ((chips[i-1][j+1].equals("RC") || chips[i-1][j+1].equals("RK")) && chips[i-2][j+2].equals("")){
                                             forceJump = true;
                                             boostemp[i-2][j+2] = true;
                                             boos2[i][j] = true;
                                         }
                                     }
                                     if (j - 2 > -1){
-                                        if ((chips[i-1][j-1].equals("BC") || chips[i-1][j-1].equals("BK")) && chips[i-2][j-2].equals("")){
+                                        if ((chips[i-1][j-1].equals("RC") || chips[i-1][j-1].equals("RK")) && chips[i-2][j-2].equals("")){
                                             forceJump = true;
                                             boostemp[i-2][j-2] = true;
                                             boos2[i][j] = true;
@@ -609,16 +609,19 @@ public class CheckersGamev2 {
             }
         }
         
-        if (forceJump && fjContinue){
+        if (forceJump){
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
                     boos[i][j] = boostemp[i][j];
                 }
             }
+            System.out.println("force jump available for player " + player1);
         } 
         if (playerChange && (!fjContinue || !forceJump)){
             player1 = !player1;
             System.out.println("Next Player ln576");
+            forceJumps(false);
+            gameBoardUpdate();
         }
         
         
