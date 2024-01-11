@@ -24,6 +24,7 @@ public class CheckersGamev2 {
     static boolean player1 = true;
     static GameBoard gamey = new GameBoard();
     //temp commented out for testing
+    
     static String[][] chips = {
 {"", "BC", "", "BC", "", "BC", "", "BC"}, 
 {"BC", "", "BC", "", "BC", "", "BC", ""}, 
@@ -46,8 +47,8 @@ public class CheckersGamev2 {
 {"", "", "BC", "", "", "", "", ""},
 {"", "RC", "", "", "", "", "", ""},
 {"", "", "BC", "", "", "", "", ""},
-};
-*/
+};*/
+
 
     static javax.swing.JButton[][] butts = {
 {gamey.b1, gamey.b2, gamey.b3, gamey.b4, gamey.b5, gamey.b6, gamey.b7, gamey.b8},
@@ -84,6 +85,8 @@ public class CheckersGamev2 {
         
         
         //Initialize gameboard -first testing and then added in own method for updating gameboard - DONE
+        
+        forceJumps(false);
         gameBoardUpdate();
         
         
@@ -128,24 +131,50 @@ public class CheckersGamev2 {
             System.out.println();
         }
         */
-        System.out.println(boos[FL1][FL2]);
+        //System.out.println(boos[FL1][FL2]);
         if (!boos[FL1][FL2]){
-            //player1=!player1; //Defunct code
-            System.out.println("Misinput! - not a valid ending location");
+            
+            forceJumps(false);
             gameBoardUpdate();
         } else if (!player1 && chips[IL1][IL2].substring(0,1).equals("R")){ //More bugfixing for turn skip glitches (following if statement does same thing but for other player)
-            //player1=!player1;
-            System.out.println("Misinput! - not a valid chip for player");
+            
+            forceJumps(false);
             gameBoardUpdate();
         } else if (player1 && chips[IL1][IL2].substring(0,1).equals("B")){
-            //player1=!player1;
-            System.out.println("Misinput! - not a valid chip for player");
+            
+            forceJumps(false);
             gameBoardUpdate();
-        } else if (boos[FL1][FL2] && !chips[IL1][IL2].equals("")){ //valid end location
-            System.out.println("success initial tests");
-            if (!forceJumps()){
+        } else if (chips[IL1][IL2].equals("RC") && !((IL1-1 == FL1 && IL2-1 == FL2) || (IL1-1 == FL1 && IL2+1 == FL2) || (IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2))){
+            //System.out.println("SOMETHING UNEXPECTED");
+            
+            forceJumps(false);
+            gameBoardUpdate();
+        } else if (chips[IL1][IL2].equals("BC") && !((IL1+1 == FL1 && IL2-1 == FL2) || (IL1+1 == FL1 && IL2+1 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2))){
+            //System.out.println("SOMETHING UNEXPECTED");
+            
+            forceJumps(false);
+            gameBoardUpdate();
+        }  else if (chips[IL1][IL2].equals("RK") && !((IL1+1 == FL1 && IL2-1 == FL2) || (IL1+1 == FL1 && IL2+1 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2) || (IL1-1 == FL1 && IL2-1 == FL2) || (IL1-1 == FL1 && IL2+1 == FL2) || (IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2))){
+            //System.out.println("SOMETHING UNEXPECTED");
+            
+            forceJumps(false);
+            gameBoardUpdate();
+        } else if (chips[IL1][IL2].equals("BK") && !((IL1+1 == FL1 && IL2-1 == FL2) || (IL1+1 == FL1 && IL2+1 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2) || (IL1-1 == FL1 && IL2-1 == FL2) || (IL1-1 == FL1 && IL2+1 == FL2) || (IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2))){
+            //System.out.println("SOMETHING UNEXPECTED");
+            
+            forceJumps(false);
+            gameBoardUpdate();
+        }else if (boos[FL1][FL2] && !chips[IL1][IL2].equals("")){ //valid end location
+            //System.out.println("success initial tests");
+            if (!forceJumps(false)){
+                gameBoardUpdate();
+                //System.out.println("Force jump ended");
+                
+                forceJumps(false);
+                gameBoardUpdate();
                 //check if they clicked a red chip and that the selected spot is in front of them based on player
                 // unfortunately will need to check if king too
+                
                 if (player1){ 
                     if (chips[IL1][IL2].substring(0,1).equals("R")){
                         
@@ -153,13 +182,25 @@ public class CheckersGamev2 {
                         if(chips[IL1][IL2].substring(1,2).equals("C") && ((IL1-1 == FL1 && IL2-1 == FL2) || IL1-1 == FL1 && IL2+1 == FL2)){
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "RC";
+                            player1=!player1;
+                            System.out.println("Next Player ln167");
+                            
+                            forceJumps(false);
+                            gameBoardUpdate();
                         } else if (chips[IL1][IL2].substring(1,2).equals("K") && ((IL1-1 == FL1 && IL2-1 == FL2) || (IL1+1 == FL1 && IL2-1 == FL2) || (IL2+1 == FL2 && IL1-1 == FL1) || (IL2+1 == FL2 && IL1+1 == FL1))){ //Added for readability
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "RK";
+                            player1=!player1;
+                            System.out.println("Next Player ln 173");
+                            
+                            forceJumps(false);
+                            gameBoardUpdate();
                         }
                         
                     } else {
-                        player1=!player1;
+                        //player1=!player1;
+                        
+                        forceJumps(false);
                         gameBoardUpdate();
                     }
                 } else if (!player1){ //Added for readability
@@ -170,18 +211,34 @@ public class CheckersGamev2 {
                         if(chips[IL1][IL2].substring(1,2).equals("C") && ((IL1+1 == FL1 && IL2+1 == FL2) || IL1+1 == FL1 && IL2-1 == FL2)){
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "BC";
+                            player1=!player1;
+                            System.out.println("Next Player ln190");
+                            
+                            forceJumps(false);
+                            gameBoardUpdate();
                         } else if (chips[IL1][IL2].substring(1,2).equals("K") && ((IL1-1 == FL1 && IL2-1 == FL2) || (IL1+1 == FL1 && IL2-1 == FL2) || (IL2+1 == FL2 && IL1-1 == FL1) || (IL2+1 == FL2 && IL1+1 == FL1))){ //Added for readability
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "BK";
+                            player1=!player1;
+                            System.out.println("Next Player ln196");
+                            
+                            forceJumps(false);
+                            gameBoardUpdate();
                         }
                         
                     } else {
-                        player1=!player1;
+                        //player1=!player1;
+                        
+                        forceJumps(false);
                         gameBoardUpdate();
                     }
                 }
-            } else if (forceJumps()){
+            } else if (forceJumps(false)){
+                gameBoardUpdate();
+                forceJumps(false);
+                gameBoardUpdate();
                 //System.out.println("Force jump!s1");
+                
                 //This is gonna be a pain to code
                 //Check if boos2 has the chip true
                 //check if boos has the final location true
@@ -197,6 +254,7 @@ public class CheckersGamev2 {
                 System.out.println("__________________boos2^");
                 System.out.println(boos2[FL1][FL2] + " and " + boos[IL1][IL2]);
                 */
+                //System.out.println("fj activated");
                 int tempInt = 0;
                 //This checks if the same chip is being used!
                 if (fjCount == 0){
@@ -217,8 +275,8 @@ public class CheckersGamev2 {
                     fjCount++;
                     
                     if (chips[IL1][IL2].equals("RC")){
-                        if ((IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2) && fjCount > 0 && fjChip.equals("" + FL1 + FL2)){
-                            System.out.println("Force jump!s3");
+                        if (((IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2)) && fjCount > 0 && fjChip.equals("" + FL1 + FL2)){
+                            //System.out.println("Force jump!s3");
                             int checker1 = FL1-IL1;
                             int checker2 = FL2-IL2;
                             if (checker1 < 0 && checker2 < 0){
@@ -232,6 +290,7 @@ public class CheckersGamev2 {
                             }
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "RC";
+                            //player1=!player1;
                         }
                     } else if (chips[IL1][IL2].equals("RK")){
                         //System.out.println("King is about to jump\n" + IL1 +IL2 + " " + FL1 + FL2 + "\nFj chip and chip clicked:\n" + fjChip + " " + FL1 + FL2);
@@ -246,17 +305,18 @@ public class CheckersGamev2 {
                                 chips[IL1+1][IL2-1] = "";
                             } else if (checker1 > 0 && checker2 > 0){
                                 chips[IL1+1][IL2+1] = "";
-                                System.out.println("King jumped diagonal down right");
+                                //System.out.println("King jumped diagonal down right");
                             } else {
-                                System.out.println("Passed upper test but couldn't find direction");
+                                //System.out.println("Passed upper test but couldn't find direction");
                             }
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "RK";
+                            //player1=!player1;
                         } else {
-                           System.out.println("King jump failed");
+                           //System.out.println("King jump failed");
                         }
                     } else if (chips[IL1][IL2].equals("BC")){
-                        if ((IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2) && fjCount > 0 && fjChip.equals(chips[IL1][IL2])){
+                        if (((IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2)) && fjCount > 0 && fjChip.equals("" + FL1 + FL2)){
                             int checker1 = FL1-IL1;
                             int checker2 = FL2-IL2;
                             if (checker1 < 0 && checker2 < 0){
@@ -270,9 +330,10 @@ public class CheckersGamev2 {
                             }
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "BC";
+                            //player1=!player1;
                         }
                     } else if (chips[IL1][IL2].equals("BK")){
-                        if ((IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2) && fjChip.equals("" + FL1 + FL2)){
+                        if (((IL1-2 == FL1 && IL2-2 == FL2) || (IL1-2 == FL1 && IL2+2 == FL2) || (IL1+2 == FL1 && IL2-2 == FL2) || (IL1+2 == FL1 && IL2+2 == FL2)) && fjChip.equals("" + FL1 + FL2)){
                             int checker1 = FL1-IL1;
                             int checker2 = FL2-IL2;
                             if (checker1 < 0 && checker2 < 0){
@@ -286,18 +347,34 @@ public class CheckersGamev2 {
                             }
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "BK";
+                            //player1=!player1;
                         }
                     }
                 }
             }
         }
-        forceJumps();
+        
+        //boolean[][] tempCheck = boos.clone(); //Terrible way of checking if the board hasn't changed but oh well
+        //boolean checker = true;
+        forceJumps(false);
         gameBoardUpdate();
+        /*
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                if (boos[i][j] != tempCheck[i][j]){
+                    checker = false;
+                }
+            }
+        }*/
+        
+        
     }
     
     public static void inputDetect(String loc){ //Locations will be button numbers rather than index locations... cause thats a lot of work
-        //gameBoardUpdate();
-        if (forceJumps()){
+        forceJumps(false);
+        gameBoardUpdate();
+        if (forceJumps(false)){
+            gameBoardUpdate();
             countInp++;
             if (countInp == 1){ //Take the location and assign it to initial or final locations based on if it's first or last input
                 initialLoc = loc;
@@ -306,12 +383,15 @@ public class CheckersGamev2 {
                 finalLoc = loc;
                 if (!initialLoc.equals(finalLoc)){ //Bugfixing turn switch without doing a move
                     movementStart();
-                    if (!forceJumps() || !fjContinue){
-                        player1 = !player1;
+                    if (!forceJumps(true) || !fjContinue){
+                        
+                        forceJumps(false);
+                        gameBoardUpdate();
                         fjCount = 0;
                     }
                     countInp = 0;
-                    gameBoardUpdate();
+                    
+                    forceJumps(false);
                     gameBoardUpdate();
                     fjContinue = true;
                 } else {
@@ -321,6 +401,9 @@ public class CheckersGamev2 {
                 
             }
         } else {
+            
+            forceJumps(false);
+            gameBoardUpdate();
             fjCount = 0;
             countInp++;
             if (countInp == 1){ //Take the location and assign it to initial or final locations based on if it's first or last input
@@ -330,9 +413,10 @@ public class CheckersGamev2 {
                 finalLoc = loc;
                 if (!initialLoc.equals(finalLoc)){ //bugfixing no movement turn switch glitch
                     movementStart();
-                    player1 = !player1;
+                    //System.out.println("Next turn");
                     countInp = 0;
-                    gameBoardUpdate();
+                    
+                    forceJumps(false);
                     gameBoardUpdate();
                 } else {
                     countInp = 0;
@@ -340,13 +424,14 @@ public class CheckersGamev2 {
                 
             }
         }
+        //System.out.println(player1 + ": is player 1 turn?");
         
     }
     
     /*
     Force jump detector!
     */
-    public static boolean forceJumps(){
+    public static boolean forceJumps(boolean playerChange){
         boolean[][] boostemp = { //Used for any jumps - WHERE they will move
         {false, false, false, false, false, false, false, false},
         {false, false, false, false, false, false, false, false},
@@ -364,7 +449,7 @@ public class CheckersGamev2 {
             }
         }
         
-        System.out.println(fjCount + " is the current amount of force jumps in a row");
+        //System.out.println(fjCount + " is the current amount of force jumps in a row");
         boolean forceJump = false;
         if (player1){
             //loop through all chips, find those that are red
@@ -400,7 +485,7 @@ public class CheckersGamev2 {
                                 if (i+2 < 8){
                                     //Code here for below-chip detection (check if on board)
                                     if (j + 2 < 8){
-                                        System.out.println("FJ with king going right available");
+                                        //System.out.println("FJ with king going right available");
                                         if ((chips[i+1][j+1].equals("BC") || chips[i+1][j+1].equals("BK")) && chips[i+2][j+2].equals("")){ //Detects if chip is diagonal then if open space past it (REPEATED!!)
                                             forceJump = true;
                                             boostemp[i+2][j+2] = true;
@@ -514,17 +599,31 @@ public class CheckersGamev2 {
                 }
             }
         }
+        
         if (!fjChip.equals("")){
-            if (!boos2[Integer.parseInt(fjChip.substring(0,1))][Integer.parseInt(fjChip.substring(1,2))]){
-                System.out.println("fj chain end");
+            //System.out.println("fjChip is " + fjChip + " and boos2 there is " + boos2[Integer.parseInt(fjChip.substring(0,1))][Integer.parseInt(fjChip.substring(1,2))]);
+            if (!boos2[Integer.parseInt(fjChip.substring(0,1))][Integer.parseInt(fjChip.substring(1,2))] && fjCount > 0){
+                //System.out.println("fj chain end");
                 fjContinue = false;
+                //player1 = !player1;
             }
         }
+        
         if (forceJump && fjContinue){
-            boos = boostemp.clone(); //Change possible moves to only the force jumps or leave same if no FJ
+            for (int i = 0; i < 8; i++){
+                for (int j = 0; j < 8; j++){
+                    boos[i][j] = boostemp[i][j];
+                }
+            }
+        } 
+        if (playerChange && (!fjContinue || !forceJump)){
+            player1 = !player1;
+            System.out.println("Next Player ln576");
         }
         
         
+        
+        //System.out.println("Returning " + forceJump);
         return forceJump;
     }
     
@@ -533,10 +632,11 @@ public class CheckersGamev2 {
     */
     public static void gameBoardUpdate(){
         //update boos for highlighting possible moves (other than FJs as those are handled by the forceJumps method)
-        if (!forceJumps()){
+        //forceJumps(false);
+        if (!forceJumps(false)){
             //System.out.println("No FJs!");
             //First reset possible moves
-            
+            System.out.println("No fj's");
             //Retrying with regular style
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
@@ -558,9 +658,9 @@ public class CheckersGamev2 {
                                 if (i-1 >-1 && j+1 < 8 && chips[i-1][j+1].equals("")){
                                     boos[i-1][j+1] = true;
                                 }
-                                System.out.println("Chip detected! " + chips[i][j].substring(1,2) + " at " + i + j);
+                                //System.out.println("Chip detected! " + chips[i][j].substring(1,2) + " at " + i + j);
                                 if (chips[i][j].substring(1,2).equals("K")){
-                                    System.out.println("King detected!");
+                                    //System.out.println("King detected!");
                                     if (i+1 <8 && j-1 > -1 && chips[i+1][j-1].equals("")){
                                         boos[i+1][j-1] = true;
                                     }
@@ -598,7 +698,15 @@ public class CheckersGamev2 {
             }
         }
         
-        
+        if (forceJumps(false)){
+            System.out.println("Force jumps should be highlighted");
+            for (int i = 0; i < 8; i++){
+                for (int j = 0; j < 8; j++){
+                    System.out.print(boos[i][j] + " ");
+                }
+                System.out.println();
+            }
+        }
         for (int i = 0; i < chips.length; i++){
             for (int j = 0; j < chips[i].length; j++){
                 if (chips[i][j].equals("")){ //No chip
@@ -606,12 +714,6 @@ public class CheckersGamev2 {
                     butts[i][j].setContentAreaFilled(false);
                     butts[i][j].setBorderPainted(false);
                     butts[i][j].setText("");
-                    if (boos[i][j]){
-                        butts[i][j].setBackground(Color.GREEN);
-                        butts[i][j].setOpaque(true);
-                        butts[i][j].setContentAreaFilled(true);
-                        butts[i][j].setBorderPainted(true);
-                    }
                 } else if (chips[i][j].substring(0,1).equals("R")){ //Determine color
                     if (chips[i][j].substring(1,2).equals("C")){ //Regular red chip
                         butts[i][j].setBackground(Color.RED);
@@ -675,6 +777,13 @@ public class CheckersGamev2 {
                         chips[i][j] = "BK";
                     }
                 }
+                if (boos[i][j]){
+                    butts[i][j].setBackground(Color.GREEN);
+                    butts[i][j].setOpaque(true);
+                    butts[i][j].setContentAreaFilled(true);
+                    butts[i][j].setBorderPainted(true);
+                }
+                
             }
         }
     }
