@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.mycompany.checkersgamev2","l":"CheckersGamev2"},{"p":"com.mycompany.checkersgamev2","l":"GameBoard"},{"p":"com.mycompany.checkersgamev2","l":"playerSelect"}];updateSearchResults();
