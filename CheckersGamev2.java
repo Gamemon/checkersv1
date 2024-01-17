@@ -3,8 +3,9 @@
  */
 
 package com.mycompany.checkersgamev2;
-import javax.swing.*;
+//import javax.swing.*;
 import java.awt.*;
+//import java.util.concurrent.TimeUnit;
 /**
  *
  * @author antho
@@ -13,6 +14,9 @@ import java.awt.*;
 
 public class CheckersGamev2 {
 
+    static int winCheckCount = 0;
+    static String[][] chipsTemp = new String[8][8];
+    
     static int fjCount = 0; //Counts how many continuous force jumps there are
     static String fjChip = "";
     static boolean fjContinue = true;
@@ -23,6 +27,10 @@ public class CheckersGamev2 {
     static String indexFL = "";
     static boolean player1 = true;
     static GameBoard gamey = new GameBoard();
+    static playerSelect ps = new playerSelect(); //Ok so I may have forgotten to capitilize this properly but it's too late to change it now
+    public static boolean botActive = false;
+    static String loc1Temp = "";
+    static String loc2Temp = "";
     //temp commented out for testing
     
     static String[][] chips = {
@@ -35,19 +43,23 @@ public class CheckersGamev2 {
 {"", "RC", "", "RC", "", "RC", "", "RC"},
 {"RC", "", "RC", "", "RC", "", "RC", ""},
 };
+
+    
+    static String comboCodes = "";
     
 
     /*
     static String[][] chips = {
 {"", "RK", "", "RK", "", "", "", ""}, 
-{"", "", "BC", "", "", "", "BC", ""}, 
+{"", "", "RC", "", "", "", "RC", ""}, 
 {"", "", "", "", "", "", "", ""},
-{"", "", "BC", "", "BC", "", "", ""}, 
+{"", "", "RC", "", "RC", "", "", ""}, 
 {"", "", "", "", "", "", "", ""},
-{"", "", "BC", "", "", "", "", ""},
-{"", "RC", "", "", "", "", "", ""},
-{"", "", "BC", "", "", "", "", ""},
-};*/
+{"", "", "RC", "", "", "", "", ""},
+{"", "RK", "", "", "", "", "", ""},
+{"", "", "RC", "", "", "", "", ""},
+};
+*/
 
 
     static javax.swing.JButton[][] butts = {
@@ -81,7 +93,8 @@ public class CheckersGamev2 {
     {false, false, false, false, false, false, false, false}
     };
     public static void main(String[] args) {
-        gamey.setVisible(true);
+        ps.setVisible(true);
+        //gamey.setVisible(true);
         
         
         //Initialize gameboard -first testing and then added in own method for updating gameboard - DONE
@@ -183,7 +196,7 @@ public class CheckersGamev2 {
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "RC";
                             player1=!player1;
-                            System.out.println("Next Player ln167");
+                            //System.out.println("Next Player ln167");
                             
                             forceJumps(false);
                             gameBoardUpdate();
@@ -191,7 +204,7 @@ public class CheckersGamev2 {
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "RK";
                             player1=!player1;
-                            System.out.println("Next Player ln 173");
+                            //System.out.println("Next Player ln 173");
                             
                             forceJumps(false);
                             gameBoardUpdate();
@@ -212,7 +225,7 @@ public class CheckersGamev2 {
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "BC";
                             player1=!player1;
-                            System.out.println("Next Player ln190");
+                            //System.out.println("Next Player ln190");
                             
                             forceJumps(false);
                             gameBoardUpdate();
@@ -220,7 +233,7 @@ public class CheckersGamev2 {
                             chips[IL1][IL2] = "";
                             chips[FL1][FL2] = "BK";
                             player1=!player1;
-                            System.out.println("Next Player ln196");
+                            //System.out.println("Next Player ln196");
                             
                             forceJumps(false);
                             gameBoardUpdate();
@@ -371,6 +384,7 @@ public class CheckersGamev2 {
     }
     
     public static void inputDetect(String loc){ //Locations will be button numbers rather than index locations... cause thats a lot of work
+        comboCodes = "";
         forceJumps(false);
         gameBoardUpdate();
         if (forceJumps(false)){
@@ -397,6 +411,16 @@ public class CheckersGamev2 {
                 } else {
                     countInp = 0;
                 }
+                if (!player1 && botActive){
+                    //TimeUnit.SECONDS.sleep(2);
+                    comboCodes = "";
+                    loc1Temp = "";
+                    loc2Temp = "";
+                    gameBoardUpdate();
+                    randomDecision();
+                }
+                System.out.println(winCond());
+                
                 
                 
             }
@@ -421,6 +445,15 @@ public class CheckersGamev2 {
                 } else {
                     countInp = 0;
                 }
+                if (!player1 && botActive){
+                    //TimeUnit.SECONDS.sleep(2);
+                    comboCodes = "";
+                    loc1Temp = "";
+                    loc2Temp = "";
+                    gameBoardUpdate();
+                    randomDecision();
+                }
+                //System.out.println(winCond());
                 
             }
         }
@@ -544,6 +577,7 @@ public class CheckersGamev2 {
                                             boostemp[i+2][j+2] = true; //Sets space diagonal (past chip) to allow moves
                                             boos2[i][j] = true; //Sets chip needing force jump to be moveable
                                             //Repeated below!
+                                            comboCodes = comboCodes  + "" + i + "" + j + "" + (i+2) + "" + (j+2) + "";
                                         }
                                     }
                                     if (j - 2 > -1){
@@ -551,6 +585,7 @@ public class CheckersGamev2 {
                                             forceJump = true;
                                             boostemp[i+2][j-2] = true;
                                             boos2[i][j] = true;
+                                            comboCodes = comboCodes  + "" + i + "" + j + "" + (i+2) + "" + (j-2) + "";
                                         }
                                     }
                                 }
@@ -563,6 +598,7 @@ public class CheckersGamev2 {
                                             forceJump = true;
                                             boostemp[i+2][j+2] = true;
                                             boos2[i][j] = true;
+                                            comboCodes = comboCodes  + "" + i + "" + j + "" + (i+2) + "" + (j+2) + "";
                                         }
                                     }
                                     if (j - 2 > -1){
@@ -570,6 +606,7 @@ public class CheckersGamev2 {
                                             forceJump = true;
                                             boostemp[i+2][j-2] = true;
                                             boos2[i][j] = true;
+                                            comboCodes = comboCodes  + "" + i + "" + j + "" + (i+2) + "" + (j-2) + "";
                                         }
                                     }
                                 }
@@ -580,6 +617,7 @@ public class CheckersGamev2 {
                                             forceJump = true;
                                             boostemp[i-2][j+2] = true;
                                             boos2[i][j] = true;
+                                            comboCodes = comboCodes  + "" + i + "" + j + "" + (i-2) + "" + (j+2) + "";
                                         }
                                     }
                                     if (j - 2 > -1){
@@ -587,6 +625,7 @@ public class CheckersGamev2 {
                                             forceJump = true;
                                             boostemp[i-2][j-2] = true;
                                             boos2[i][j] = true;
+                                            comboCodes = comboCodes  + "" + i + "" + j + "" + (i-2) + "" + (j-2) + "";
                                         }
                                     }
                                 }
@@ -615,11 +654,11 @@ public class CheckersGamev2 {
                     boos[i][j] = boostemp[i][j];
                 }
             }
-            System.out.println("force jump available for player " + player1);
+            //System.out.println("force jump available for player " + player1);
         } 
         if (playerChange && (!fjContinue || !forceJump)){
             player1 = !player1;
-            System.out.println("Next Player ln576");
+            //System.out.println("Next Player ln576");
             forceJumps(false);
             gameBoardUpdate();
         }
@@ -628,6 +667,134 @@ public class CheckersGamev2 {
         
         //System.out.println("Returning " + forceJump);
         return forceJump;
+    }
+    
+    public static void randomDecision(){
+        boolean checkinThang = true;
+        String selectionThang = "";
+        if (!comboCodes.equals("")){
+            while (checkinThang){
+                int ranDumb = (int) (Math.random()*comboCodes.length());
+                if (ranDumb%4 == 0){
+                    selectionThang = comboCodes.substring(ranDumb, ranDumb+4);
+                    //System.out.println(selectionThang);
+                    checkinThang = false;
+                    //System.out.println(comboCodes);
+                    int[][] tempInt2d = new int[8][8];
+                    tempInt2d[Integer.parseInt(selectionThang.substring(0,1))][Integer.parseInt(selectionThang.substring(1,2))] = 1;
+                    tempInt2d[Integer.parseInt(selectionThang.substring(2,3))][Integer.parseInt(selectionThang.substring(3,4))] = 2;
+                    //inputDetect();
+                    int count = 0;
+                    loc1Temp = "";
+                    loc2Temp = "";
+                    for(int[] row : tempInt2d){
+                        for(int itemI : row){
+                            count++;
+                            if (itemI == 1){
+                                loc1Temp = "" + count;
+                            } else if (itemI == 2){
+                                loc2Temp = "" + count;
+                            }
+                        }
+                    }
+                    //gameBoardUpdate();
+                    
+                    
+                    if (forceJumps(false)){
+                        System.out.println(comboCodes + " " + loc1Temp + loc2Temp); //idk why things stopped working and now work
+                    }
+                    
+                    inputDetect(loc1Temp);
+                    inputDetect(loc2Temp);
+                }
+            }
+        }
+    }
+    
+    public static String winCond(){
+        String whoWon = "";
+        boolean winChecker = false;
+        
+        //Check if all pieces are gone from a specific player
+        boolean redC = false;
+        boolean blackC = false;
+        for (String[] row : chips){
+            for (String itemS : row){
+                if (!itemS.equals("")){
+                    if (itemS.substring(0,1).equals("R")){
+                        redC = true;
+                    }
+                    if (itemS.substring(0,1).equals("B")){
+                        blackC = true;
+                    } 
+                }
+                
+            }
+        }
+        if (!(redC && blackC)){
+            if (redC){
+                whoWon = "red";
+                winChecker = true;
+            }
+            if (blackC){
+                whoWon = "black";
+                winChecker = true;
+            }
+        }
+        
+        //Check if moves repeat itself (very basic but does not allow stalling)
+        if (!winChecker){
+            winCheckCount++;
+            if (winCheckCount == 1){
+                for (int i = 0; i < 8; i++){
+                    for (int j = 0; j< 8; j ++){
+                        chipsTemp[i][j] = chips[i][j];
+                    }
+                }
+                //.clone() I guess also has the same reference location or something so I resorted to loops
+            } else if (winCheckCount == 10) {
+                winChecker = true;
+                for(int i = 0; i < 8; i++){
+                    for(int j = 0; j < 8; j++){
+                        if (!chipsTemp[i][j].equals(chips[i][j])){
+                            winChecker = false;
+                        }
+                    }
+                }
+                if (winChecker){
+                    whoWon = "stalemate";
+                }
+                winCheckCount = 0;
+            }
+        }
+        
+        
+        //Checks if any moves are available for current player (technically also checks if any peices on board too but whatever)
+        if (!winChecker){
+            winChecker = true;
+            for (boolean[] row : boos){
+                for (boolean itemB : row){
+
+                    if (itemB){
+                        winChecker = false;
+                    }
+                }
+            }
+            if (winChecker){
+                if (player1){
+                    whoWon = "black";
+                } else {
+                    whoWon = "red";
+                }
+                
+            }
+        }
+        
+        
+        if (winChecker){
+            return whoWon;
+        }
+        return "";
     }
     
     /*
@@ -639,7 +806,7 @@ public class CheckersGamev2 {
         if (!forceJumps(false)){
             //System.out.println("No FJs!");
             //First reset possible moves
-            System.out.println("No fj's");
+            //System.out.println("No fj's");
             //Retrying with regular style
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
@@ -680,16 +847,20 @@ public class CheckersGamev2 {
                             if (chips[i][j].substring(0,1).equals("B")){
                                 if (i+1 < 8 && j+1 < 8 && chips[i+1][j+1].equals("")){
                                     boos[i+1][j+1] = true;
+                                    comboCodes = comboCodes  + "" + i + "" + j + "" + (i+1) + "" + (j+1) + "";
                                 }
                                 if (i+1 < 8 && j-1 >-1 && chips[i+1][j-1].equals("")){
                                     boos[i+1][j-1] = true;
+                                    comboCodes = comboCodes  + "" + i + "" + j + "" + (i+1) + "" + (j-1) + "";
                                 }
                                 if (chips[i][j].substring(1,2).equals("K")){
                                     if (i-1 > -1 && j-1 > -1 && chips[i-1][j-1].equals("")){
                                         boos[i-1][j-1] = true;
+                                        comboCodes = comboCodes  + "" + i + "" + j + "" + (i-1) + "" + (j-1) + "";
                                     }
                                     if (i-1 >-1 && j+1 < 8 && chips[i-1][j+1].equals("")){
                                         boos[i-1][j+1] = true;
+                                        comboCodes = comboCodes  + "" + i + "" + j + "" + (i-1) + "" + (j+1) + "";
                                     }
                                 }
                             }
@@ -702,13 +873,14 @@ public class CheckersGamev2 {
         }
         
         if (forceJumps(false)){
-            System.out.println("Force jumps should be highlighted");
+            /*System.out.println("Force jumps should be highlighted");
             for (int i = 0; i < 8; i++){
                 for (int j = 0; j < 8; j++){
                     System.out.print(boos[i][j] + " ");
                 }
                 System.out.println();
             }
+            */
         }
         for (int i = 0; i < chips.length; i++){
             for (int j = 0; j < chips[i].length; j++){
